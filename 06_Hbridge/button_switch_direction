@@ -1,0 +1,66 @@
+// Switch - pull up mode
+// (when pressed, moves in one direction, else moves in other direction)
+int switch_input = 13;
+  
+// Motor A connections
+int enA = 5; // -- enable
+int in1 = 2;
+int in2 = 3;
+
+// Motor B connections
+int enB = 10; // -- enable
+int in3 = 7;
+int in4 = 8;
+
+void setup() {
+	// Set all the motor control pins to outputs
+	pinMode(enA, OUTPUT);
+	pinMode(enB, OUTPUT);
+	pinMode(in1, OUTPUT); // motor 1
+	pinMode(in2, OUTPUT); // motor 1
+	pinMode(in3, OUTPUT); // motor 2
+	pinMode(in4, OUTPUT); // motor 2
+	
+	// Turn off the motors - Initial state
+	digitalWrite(in1, LOW);
+	digitalWrite(in2, LOW);
+	digitalWrite(in3, LOW);
+	digitalWrite(in4, LOW);
+  
+  	pinMode(switch_input, INPUT_PULLUP);
+  	Serial.begin(9600);
+  
+}
+
+void loop() {
+  	// Set motors to maximum speed
+	analogWrite(enA, 255);
+	analogWrite(enB, 255);  
+  	int value = digitalRead(switch_input);
+	directionControl(value);
+	delay(1000);
+}
+
+// This function lets you control spinning direction of motors
+void directionControl(int value) {
+  Serial.println(value);
+  	if(value == HIGH) {
+      // Turn on motor A & B -- 1010
+      digitalWrite(in1, HIGH);
+      digitalWrite(in2, LOW);
+      digitalWrite(in3, HIGH);
+      digitalWrite(in4, LOW);
+      delay(2000); 
+      
+    } else {
+      // Reverse motor directions -- 0101
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, HIGH);
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, HIGH);
+      delay(2000);      
+    }
+ 
+}
+
+// link - https://www.tinkercad.com/things/bfAiBGAreEl?sharecode=CXn0-winzC9G44mWU444FbXI4-qA-1Lga8QtTdohPOc
